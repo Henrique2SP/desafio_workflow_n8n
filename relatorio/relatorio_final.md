@@ -1,5 +1,5 @@
 ## Uso da IA:
-Utilizei o modelo Gemini 2.5 pro para:
+Utilizei o modelo Gemini 2.5pro para:
 - Sintaxe do back em fastapi
 - Criar arquivo docker-compose
 
@@ -7,3 +7,4 @@ Utilizei o modelo Gemini 2.5 pro para:
 - Só precisa rodar o docker-compose para ter acesso a toda aplicação
 - .env:
 - Interação com o banco de dados apenas no arquivo database.py
+- Fiz um models.py para

@@ -1,0 +1,291 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "c78246c1-0310-4e99-8fd1-6d06fbff6b49",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1KeEF47VXCXO-eZpxhFG8Ye3gNRG3qwUSjES2kZ-_Xeo/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Agenda IA",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        240,
+        -192
+      ],
+      "id": "b4de814f-8718-4f0a-ab5a-0f77fed3bd74",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "9ptPy5Ha3gdyDyof",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1OjisMsyH_xSJPmFq43mbC-_IX-w02VjAiUkea6-ovcw/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "RECURSOS HUMANOS",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        224,
+        0
+      ],
+      "id": "eb630fa8-d063-4ed6-b7bf-ce62acaf8f5d",
+      "name": "Get row(s) in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "9ptPy5Ha3gdyDyof",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1UNROt8uGtCsr1TIsSJ8hC1ZVDQ_4_pXnVzg4mlLPasA/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "MKT",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        224,
+        208
+      ],
+      "id": "eabc716a-6032-41e0-a94a-fe6c69b8aa2e",
+      "name": "Get row(s) in sheet2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "9ptPy5Ha3gdyDyof",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n    \"evento\": \"{{ $json.Evento }}\",\n    \"data\": \"{{ $json['Data/Anual'] }}\",\n    \"descricao\": \"{{ $json['Descrição'] }}\",\n    \"engajamento\": {{ $json.Engajamento }},\n    \"status\": \"{{ $json.STATUS }}\",\n    \"origem\": \"IA\"\n  }",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        448,
+        -192
+      ],
+      "id": "5d3ca81e-e0c4-4403-93a1-68aac2813a9f",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n    \"evento\": \"{{ $json.Evento }}\",\n    \"data\": \"{{ $json['Data/Anual'] }}\",\n    \"descricao\": \"{{ $json['Descrição'] }}\",\n    \"engajamento\": {{ $json.ALCANCE }},\n    \"status\": \"{{ $json.STATUS }}\",\n    \"origem\": \"RH\"\n  }",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        432,
+        0
+      ],
+      "id": "331b250b-23b3-40f4-8ef8-ed788de15389",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n    \"evento\": {{ JSON.stringify($json.Evento) }},\n    \"data\": \"{{ $json['Data/Anual'] }}\",\n    \"descricao\": \"{{ $json['Descrição'] }}\",\n    \"engajamento\": null,\n    \"status\": \"{{ $json.STATUS }}\",\n    \"origem\": \"MKT\"\n  }",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        432,
+        208
+      ],
+      "id": "baa03627-e088-4324-befd-276887be59ac",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "numberInputs": 3
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        640,
+        0
+      ],
+      "id": "39de014e-09a9-45e8-a078-80f8539bc70a",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http:/api/eventos:8000",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"evento\": {{ JSON.stringify($json.evento) }},\n    \"data\": {{ JSON.stringify($json.data) }},\n    \"descricao\": {{ JSON.stringify($json.descricao) }},\n    \"status\": {{ JSON.stringify($json.status) }},\n    \"origem\": {{ JSON.stringify($json.origem) }},\n    \"engajamento\": {{ $json.engajamento }}\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        848,
+        16
+      ],
+      "id": "db675d47-9000-44f4-a477-9d2161af2fdc",
+      "name": "HTTP Request"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get row(s) in sheet1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get row(s) in sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "e3b0982c-5381-4163-b9f7-faf79520afc1",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9f739ab5bf6989b9e852bfb8c9f747d395c0840ffee0f4e336c950b113790c89"
+  },
+  "id": "D1PhYeAOYyvlSPpX",
+  "tags": []
+}

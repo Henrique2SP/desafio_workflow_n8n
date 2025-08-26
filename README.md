@@ -82,6 +82,9 @@ Após iniciar o ambiente, a primeira coisa a fazer é popular o banco de dados.
 4.  Configure as credenciais do Google Sheets no nó correspondente (acesse `https://console.cloud.google.com/auth` para criar uma credencial).
 5.  Execute o workflow manualmente clicando em "Execute Workflow". Os dados das planilhas serão enviados para o banco de dados.
 
+<img width="1214" height="603" alt="image" src="https://github.com/user-attachments/assets/5686f33e-bc31-4258-9aeb-3b34baa79a81" />
+
+
 ### 2. Consulta com a Inteligência Artificial
 
 Com o banco de dados populado, você pode interagir com o agente de IA.
@@ -91,6 +94,9 @@ Com o banco de dados populado, você pode interagir com o agente de IA.
 3.  Ative o workflow.
 4.  Copie a URL de produção do nó Webhook.
 5.  Abra um terminal e use o `curl` para fazer uma pergunta. Substitua a URL e a pergunta conforme necessário.
+
+<img width="1289" height="716" alt="image" src="https://github.com/user-attachments/assets/460de310-f601-4dc7-8877-9e9476599cf6" />
+
 
 **Exemplo de consulta:**
 ```bash

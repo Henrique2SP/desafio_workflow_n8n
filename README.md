@@ -87,7 +87,7 @@ Após iniciar o ambiente, a primeira coisa a fazer é popular o banco de dados.
 Com o banco de dados populado, você pode interagir com o agente de IA.
 
 1.  Importe o workflow de IA (`/workflows/consulta.json`) no n8n.
-2.  Configure as credenciais da OpenAI no nó "AI Agent".
+2.  Configure as credenciais da OpenAI no nó "OpenAI Chat Model".
 3.  Ative o workflow.
 4.  Copie a URL de produção do nó Webhook.
 5.  Abra um terminal e use o `curl` para fazer uma pergunta. Substitua a URL e a pergunta conforme necessário.

@@ -1,13 +1,12 @@
 {
-  "name": "My workflow",
   "nodes": [
     {
       "parameters": {},
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
-        0,
-        0
+        48,
+        16
       ],
       "id": "c78246c1-0310-4e99-8fd1-6d06fbff6b49",
       "name": "When clicking ‘Execute workflow’"
@@ -29,8 +28,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        240,
-        -192
+        288,
+        -176
       ],
       "id": "b4de814f-8718-4f0a-ab5a-0f77fed3bd74",
       "name": "Get row(s) in sheet",
@@ -58,8 +57,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        224,
-        0
+        272,
+        16
       ],
       "id": "eb630fa8-d063-4ed6-b7bf-ce62acaf8f5d",
       "name": "Get row(s) in sheet1",
@@ -87,8 +86,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        224,
-        208
+        272,
+        224
       ],
       "id": "eabc716a-6032-41e0-a94a-fe6c69b8aa2e",
       "name": "Get row(s) in sheet2",
@@ -108,8 +107,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        448,
-        -192
+        480,
+        -176
       ],
       "id": "5d3ca81e-e0c4-4403-93a1-68aac2813a9f",
       "name": "Edit Fields"
@@ -123,8 +122,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        432,
-        0
+        480,
+        16
       ],
       "id": "331b250b-23b3-40f4-8ef8-ed788de15389",
       "name": "Edit Fields1"
@@ -132,35 +131,22 @@
     {
       "parameters": {
         "mode": "raw",
-        "jsonOutput": "={\n    \"evento\": {{ JSON.stringify($json.Evento) }},\n    \"data\": \"{{ $json['Data/Anual'] }}\",\n    \"descricao\": \"{{ $json['Descrição'] }}\",\n    \"engajamento\": null,\n    \"status\": \"{{ $json.STATUS }}\",\n    \"origem\": \"MKT\"\n  }",
+        "jsonOutput": "={\n    \"evento\": {{ JSON.stringify($json.Evento) }},\n    \"data\": \"{{ $json['Data/Anual'] }}\",\n    \"descricao\": \"{{ $json['Descrição'] }}\",\n    \"engajamento\": 0,\n    \"status\": \"{{ $json.STATUS }}\",\n    \"origem\": \"MKT\"\n  }",
         "options": {}
       },
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        432,
-        208
+        480,
+        224
       ],
       "id": "baa03627-e088-4324-befd-276887be59ac",
       "name": "Edit Fields2"
     },
     {
       "parameters": {
-        "numberInputs": 3
-      },
-      "type": "n8n-nodes-base.merge",
-      "typeVersion": 3.2,
-      "position": [
-        640,
-        0
-      ],
-      "id": "39de014e-09a9-45e8-a078-80f8539bc70a",
-      "name": "Merge"
-    },
-    {
-      "parameters": {
         "method": "POST",
-        "url": "http:/api/eventos:8000",
+        "url": "http:/api:8000/eventos",
         "sendBody": true,
         "specifyBody": "json",
         "jsonBody": "={\n    \"evento\": {{ JSON.stringify($json.evento) }},\n    \"data\": {{ JSON.stringify($json.data) }},\n    \"descricao\": {{ JSON.stringify($json.descricao) }},\n    \"status\": {{ JSON.stringify($json.status) }},\n    \"origem\": {{ JSON.stringify($json.origem) }},\n    \"engajamento\": {{ $json.engajamento }}\n}",
@@ -169,14 +155,26 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        848,
+        944,
         16
       ],
       "id": "db675d47-9000-44f4-a477-9d2161af2fdc",
       "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "numberInputs": 3
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        704,
+        0
+      ],
+      "id": "5924d4c2-57f3-4bb2-a18e-a4d4266ebc4d",
+      "name": "Merge"
     }
   ],
-  "pinData": {},
   "connections": {
     "When clicking ‘Execute workflow’": {
       "main": [
@@ -232,17 +230,6 @@
         ]
       ]
     },
-    "Edit Fields1": {
-      "main": [
-        [
-          {
-            "node": "Merge",
-            "type": "main",
-            "index": 1
-          }
-        ]
-      ]
-    },
     "Edit Fields": {
       "main": [
         [
@@ -250,6 +237,17 @@
             "node": "Merge",
             "type": "main",
             "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
           }
         ]
       ]
@@ -265,6 +263,11 @@
         ]
       ]
     },
+    "HTTP Request": {
+      "main": [
+        []
+      ]
+    },
     "Merge": {
       "main": [
         [
@@ -277,15 +280,9 @@
       ]
     }
   },
-  "active": false,
-  "settings": {
-    "executionOrder": "v1"
-  },
-  "versionId": "e3b0982c-5381-4163-b9f7-faf79520afc1",
+  "pinData": {},
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "9f739ab5bf6989b9e852bfb8c9f747d395c0840ffee0f4e336c950b113790c89"
-  },
-  "id": "D1PhYeAOYyvlSPpX",
-  "tags": []
+  }
 }

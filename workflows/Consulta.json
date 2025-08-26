@@ -1,0 +1,284 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "315b4a17-221e-4112-b3c0-b2f86a3c9ddc",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -48,
+        -32
+      ],
+      "id": "16f0fc66-dc31-40bc-bec1-1a3c31940adc",
+      "name": "Webhook",
+      "webhookId": "315b4a17-221e-4112-b3c0-b2f86a3c9ddc"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body.prompt }}",
+        "options": {
+          "systemMessage": "Você é o Assistente da Facilit, um IA amigável e profissional, especialista na tabela Eventos. Sua comunicação deve ser simples, clara e positiva.\n\nDiretrizes:\n\nEscopo Fixo: Responda apenas sobre eventos. Para outros assuntos, recuse educadamente.\n\nSeja Conciso: Entregue somente o que foi pedido, sem informações técnicas ou detalhes extras.\n\nTom e Formato:\n\nUse um tom conversacional e profissional.\n\nFormato de data: AAAA-MM-DD.\n\nUse emojis sutis para cordialidade (ex: 😊, 📅, ✅).\n\nCasos de Resposta:\n\nSucesso: Apresente os resultados de forma limpa e direta.\n\nSem resultados: \"Não encontrei eventos com esses critérios, mas posso ajudar a buscar de outra forma se quiser 😊.\"\n\nErro: \"Tive um probleminha ao consultar os eventos. Pode tentar novamente em alguns instantes, por favor?\"\n\nAmbíguo: Peça esclarecimentos (ex: \"Claro! Você quer ver só os nomes ou todos os detalhes dos eventos?\").\n\nCapacidades Técnicas:\n\nMétodos permitidos: GET, POST, PUT.\n\nCampos do banco: evento (string), data (string), descricao (string), engajamento (int), status (string), origem (string).\n\nAlias: marketing se refere a MKT.\n\n## MANUAL DE USO DA TOOL\n\nPara usar o PUT, primeiro você SEMPRE **NÃO PULE ESTA ETAPA, ELA É CRUCIAL PARA A BOA FUNCIONALIDADE DA TOOL** tem que fazer uma requisição no GET, e ver qual o ID da entidade que o usuário está procurando para mudar (veja a mais semelhante, pois podem haver erros de digitação).\nDepois, você deve preencher o campo do endpoint desse jeito:\n\nhttp://api:8000/eventos/{{id da entidade que você achou no get}}\n\nalém disso, você deve preencher as informações (variáveis) do PUT de acordo com o que o usuário pediu.",
+          "maxIterations": 5
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        224,
+        -32
+      ],
+      "id": "b78c96fc-69f5-4965-9750-b9c2e49ff6f4",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-3.5-turbo",
+          "mode": "list",
+          "cachedResultName": "gpt-3.5-turbo"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        64,
+        160
+      ],
+      "id": "0303c5dd-6c01-4878-b7b4-22c79b27197d",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "hZRLqPZSjOAMA0k6",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.body.prompt }}",
+        "contextWindowLength": 2
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        208,
+        160
+      ],
+      "id": "993e4b15-9d95-481d-961e-921d445583ee",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Faz um request HTTP de acordo com a pergunta do usuário, passe a consulta no formato json especificado no body.",
+        "method": "POST",
+        "url": "http://api:8000/eventos",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "evento",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', ``, 'string') }}"
+            },
+            {
+              "name": "data",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', ``, 'string') }}"
+            },
+            {
+              "name": "descricao",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters2_Value', ``, 'string') }}"
+            },
+            {
+              "name": "engajamento",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters3_Value', ``, 'string') }}"
+            },
+            {
+              "name": "status",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters4_Value', ``, 'string') }}"
+            },
+            {
+              "name": "origem",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters5_Value', ``, 'string') }}"
+            },
+            {
+              "name": "id",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters6_Value', ``, 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        368,
+        240
+      ],
+      "id": "d70b1cd7-b5b2-4033-99c7-e7b590466365",
+      "name": "Inserir_eventos"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Use esta ferramenta para buscar e obter uma lista de todos os eventos agendados da empresa. A ferramenta não precisa de parâmetros, ela retorna os eventos de acordo com o pedido feito.",
+        "url": "http://api:8000/eventos",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        592,
+        240
+      ],
+      "id": "55fb870e-7e75-4707-aaf9-48e5c090fefb",
+      "name": "Buscar_eventos"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Faz um request HTTP de acordo com a solicitação do usuário, que vai passar as informações para serem alteradas num evento já existente que o usuário vai dizer.",
+        "method": "PUT",
+        "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', ``, 'string') }}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "evento",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', ``, 'string') }}"
+            },
+            {
+              "name": "data",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', ``, 'string') }}"
+            },
+            {
+              "name": "descricao",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters2_Value', ``, 'string') }}"
+            },
+            {
+              "name": "engajamento",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters3_Value', ``, 'string') }}"
+            },
+            {
+              "name": "status",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters4_Value', ``, 'string') }}"
+            },
+            {
+              "name": "origem",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters5_Value', ``, 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        240
+      ],
+      "id": "6656e9d6-a2b1-47c4-aa55-e25670383606",
+      "name": "Atualizar_eventos"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        []
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Inserir_eventos": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar_eventos": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Atualizar_eventos": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {
+    "Webhook": [
+      {
+        "headers": {
+          "host": "localhost:5678",
+          "user-agent": "curl/8.14.1",
+          "accept": "*/*",
+          "content-type": "application/json",
+          "content-length": "55"
+        },
+        "params": {},
+        "query": {},
+        "body": {
+          "prompt": "quero que você mude o evento 'teste facilit' e atualize o evento com o nome RH FACILIT, descricao teste, origem teste, data 25/08/2025, status em andamento, engajamento 60"
+        },
+        "webhookUrl": "http://localhost:5678/webhook-test/315b4a17-221e-4112-b3c0-b2f86a3c9ddc",
+        "executionMode": "test"
+      }
+    ]
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9f739ab5bf6989b9e852bfb8c9f747d395c0840ffee0f4e336c950b113790c89"
+  }
+}
